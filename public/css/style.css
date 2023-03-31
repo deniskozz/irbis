@@ -1,0 +1,55 @@
+:root {
+    --font-family: 'Montserrat', serif;
+    --color-dark-blue: #111D4A;
+    --color-black: #000;
+    --color-border: #3c91e660;
+  }
+  
+  * {
+    font-family: var(--font-family);
+  }
+  
+  .navbar-brand {
+    font-size: 1.7em;
+    color: var(--color-dark-blue);
+    font-weight: 700;
+  }
+  
+  .headbar {
+    background-color: var(--color-dark-blue);
+  }
+  
+  .nav-link {
+    font-size: 1em;
+    font-weight: 500;
+    color: var(--color-secondary);
+  }
+  
+  .promo-title {
+    font-size: 1.3em;
+    font-weight: 500;
+    margin-top: 0.8em;
+    margin-bottom: 0.5em;
+  }
+  
+  .promo {
+    background-color: #FFFFFF;
+    box-shadow: 2px 2px 6px 2px #D2E6F9;
+    border-radius: 0 70px;
+  }
+  
+  .promo .row .col {
+    border-right: 1px solid var(--color-border);
+  }
+  
+  .promo .row .col:last-child {
+    border: none;
+  }
+  
+  .divider{
+    height: 1px;
+    background-color: var(--color-border);
+    width: 92%;
+    margin: 0 auto;
+    filter: blur(1px);
+  }
