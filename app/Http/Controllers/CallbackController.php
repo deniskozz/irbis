@@ -18,6 +18,6 @@ class CallbackController extends Controller
             'phone' => $request->phone,
         ]);
 
-        return redirect()->back()->with('success', 'Thank you for your request!');
+        return redirect()->back()->with('success', 'Спасибо за ваш запрос!');
     }
 }
