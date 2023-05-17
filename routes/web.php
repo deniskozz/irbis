@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\MainController;
+use App\Http\Controllers\CartController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\CallbackController;
 
@@ -38,9 +39,20 @@ Route::prefix('admin')->group(function () {
 
     Route::post('/store', [ProductController::class, 'store'])
         ->name('store');
+
+    // Маршрут для отображения страницы редактирования продукта
+    Route::get('/product/{id}/edit', [ProductController::class, 'edit'])->name('editproduct');
+
+    // Маршрут для обработки запроса на редактирование продукта
+    Route::post('/edit/{id}', [ProductController::class, 'update'])->name('updateproduct');
 });
+
+Route::get('/cart', [CartController::class, 'cartShow']);
+Route::post('/cart/add', [CartController::class, 'add']);
+Route::post('/cart/update', [CartController::class, 'update'])->name('cart.update');
+
+
 Route::post('/callback', [CallbackController::class, 'callback'])->name('callback');
 
+
 Auth::routes();
-
-

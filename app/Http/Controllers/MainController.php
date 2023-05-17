@@ -18,7 +18,8 @@ class MainController extends Controller
         return view('contact');
     }
 
-    public function admin(){
+    public function admin()
+    {
         if (auth()->check() && auth()->user()->admin) {
             return view('admin');
         } else {
@@ -26,17 +27,19 @@ class MainController extends Controller
         }
     }
 
-    public function catalog(){
+    public function catalog()
+    {
         $products = Product::paginate(15);
         $categories = Category::get();
         return view('catalog', compact('products', 'categories'));
     }
 
-    public function categoryFilter($id){
+    public function categoryFilter($id)
+    {
         /* $selectedCategory = Category::find($id); */
         $selectedCategory = Category::find($id);
         $categories = Category::all();
         $products = $selectedCategory->products()->paginate(15);
-        return view('catalog', compact( 'categories', 'products'));
+        return view('catalog', compact('categories', 'products'));
     }
 }
