@@ -1,4 +1,4 @@
-$(document).on("click", ".plus-btn, .minus-btn", function () {
+/* $(document).on("click", ".plus-btn, .minus-btn", function () {
     const $input = $(this).siblings(".product-quantity");
     let quantity = parseInt($input.val());
 
@@ -35,3 +35,4 @@ $(document).on("submit", ".update-form", function (event) {
             alert("Error updating cart");
         });
 });
+ */

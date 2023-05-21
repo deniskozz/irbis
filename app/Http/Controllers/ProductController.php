@@ -6,11 +6,12 @@ use Illuminate\Http\Request;
 use App\Models\Product;
 use App\Models\Category;
 
+
 class ProductController extends Controller
 {
-    public function productList()
+    public function index()
     {
-        $products = Product::all();
+        $products = Product::latest()->get();
         return view('productlist', compact('products'));
     }
 
@@ -21,37 +22,39 @@ class ProductController extends Controller
 
     public function store(Request $request)
     {
-        $product = new Product();
-        $product->name = $request->name;
-        $product->category_id = $request->category;
-        $product->description = $request->description;
-        $product->price = $request->price;
+        $data = $request->validate([
+            'name' => 'required',
+            'category_id' => 'required',
+            'description' => 'required',
+            'price' => 'required',
+            'img' => 'nullable|image|mimes:jpeg,png,jpg,gif'
+        ]);
+
+        $product = Product::create($data);
+
         if ($request->hasFile('img') && $request->file('img')->isValid()) {
-            $product->img = $request->file('img') ? $request->file('img')->store('public/products') : '';
+            $product->img = $request->file('img')->store('public/products');
+            $product->save();
         }
 
-        $product->save();
-
-        return redirect()
-            ->route('productlist')
-            ->with('success', 'Продукт успешно создан');
+        return redirect()->route('productlist')
+            ->with('success', 'Product has been created successfully.');
     }
 
     public function destroy($id)
     {
-        $product = Product::find($id);
-        dd($product);
+        $product = Product::findOrFail($id);
         $product->delete();
-        return redirect()
-            ->route('productlist')
-            ->with('success', 'Продукт успешно удален!');
+        return redirect()->route('productlist')
+            ->with('success', 'Product has been successfully deleted');
     }
+
 
     public function productPage($category, $product)
     {
         $currentProduct = Product::find($product);
-        $sliderProducts = Product::where('category_id', $currentProduct->category_id)->get();
-        return view('product', compact('currentProduct', 'sliderProducts'));
+        $relatedProducts  = Product::where('category_id', $currentProduct->category_id)->get();
+        return view('product', compact('currentProduct', 'relatedProducts'));
     }
 
     public function edit($id)
@@ -63,16 +66,20 @@ class ProductController extends Controller
 
     public function update(Request $request)
     {
-        $t = Product::find($request->id);
-        $t->name = $request->name;
-        $t->description = $request->description;
-        $t->parameters = $request->parameters;
-        $t->price = $request->price;
-        $t->category_id = $request->category_id;
-        if (isset($request->img)) {
-            $t->img = $request->file('img')->store('public/products');
+        $productToUpdate = Product::find($request->id);
+        $productToUpdate->update([
+            'name' => $request->name,
+            'description' => $request->description,
+            'parameters' => $request->parameters,
+            'price' => $request->price,
+            'category_id' => $request->category_id,
+        ]);
+
+        if ($request->hasFile('img')) {
+            $productToUpdate->img = $request->file('img')->store('public/products');
+            $productToUpdate->save();
         }
-        $t->save();
+
         return redirect()->route('productlist');
     }
 }

@@ -604,20 +604,16 @@ footer ul {
     font-size: 1.5em;
     max-width: 90px;
 }
-
 .amount-input:hover {
     border: 1px solid black;
 }
-
 .minus-btn {
     border-right: none;
     font-size: 1.7em;
 }
-
 .plus-btn {
     border-left: none;
 }
-
 .to_cart-btn {
     border: 1px solid transparent;
     border-image: var(--color-gradient);
@@ -629,15 +625,25 @@ footer ul {
     font-size: large;
     margin-left: 15px;
 }
-
 .to_cart-btn:hover {
     background: var(--color-gradient);
     color: #fff;
-    border: none 1px solid white;
-    transition: 0.3s;
+    border: none;
+    transition: border 0.3s;
 }
-
 .to_cart-form {
     display: flex;
-    align-items: end;
+    align-items: flex-end;
+}
+
+.sub-list-group {
+    padding-left: 10px;
+}
+
+.slick-arrow {
+    display: none !important;
+}
+
+.card-link h4 {
+    font-size: 18px;
 }

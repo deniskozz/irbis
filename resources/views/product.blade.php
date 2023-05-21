@@ -58,8 +58,34 @@
                 </div>
             </div>
         </div>
-        <div class="row">
-            Здесь будет слайдер
+        <div class="slider">
+            @foreach ($relatedProducts as $product)
+                <div class="slider-item col-md-4 mb-3">
+                    <div class="product-card">
+                        <a class="card-link" href="/catalog/{{ $product->Category->id }}/{{ $product->id }}">
+                            <div class="product-tumb">
+                                <img alt="" src="{{ Storage::url($product->img) }}">
+                            </div>
+                        </a>
+                        <div class="product-details">
+                            <a class="product-category"
+                                href="/catalog/{{ $product->Category->id }}">{{ $product->Category->name }}</a>
+                            <a class="card-link" href="/catalog/{{ $product->Category->id }}/{{ $product->id }}">
+                                <h4>{{ $product->name }}</h4>
+                            </a>
+                            <div class="product-bottom-details">
+                                <div class="product-price">
+
+                                    @if (isset($product->salePrice))
+                                        <small>$product->salePrice</small>
+                                    @endif
+                                    {{ $product->price }} Р
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            @endforeach
         </div>
     </div>
 
@@ -69,5 +95,11 @@
     <script>
         var currentProduct = <?php echo json_encode($currentProduct->amount); ?>;
     </script>
+    <!-- Include the required CSS and JS files -->
+    <link href="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css" rel="stylesheet" type="text/css" />
+    <script src="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js"></script>
+
+
+    <script src="{{ asset('public/js/slider.js') }}"></script>
     <script src="{{ asset('public/js/script.js') }}"></script>
 @endsection

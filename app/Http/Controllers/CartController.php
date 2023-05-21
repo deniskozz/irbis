@@ -58,7 +58,7 @@ class CartController extends Controller
         return view('cart', compact('cart', 'total'));
     }
 
-
+    /*
     public function update(Request $request)
     {
         // Get the product ID and new quantity from the request
@@ -89,5 +89,5 @@ class CartController extends Controller
             'product' => $cart[$product_id],
             'total' => $total
         ]);
-    }
+    } */
 }
