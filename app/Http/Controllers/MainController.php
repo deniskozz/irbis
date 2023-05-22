@@ -42,4 +42,17 @@ class MainController extends Controller
         $products = $selectedCategory->products()->paginate(15);
         return view('catalog', compact('categories', 'products'));
     }
+
+    public function search(Request $request, Category $category)
+    {
+        $searchTerm = $request->input('search');
+
+        $products = Product::where('name', 'like', "%{$searchTerm}%")->paginate(15);
+
+        $categories = Category::all();
+
+        $rootCategories = $category->rootCategories();
+
+        return view('catalog', compact('rootCategories', 'categories', 'products'));
+    }
 }

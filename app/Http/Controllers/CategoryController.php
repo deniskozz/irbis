@@ -16,24 +16,11 @@ class CategoryController extends Controller
         return view('catalog')->with(compact('rootCategories', 'products'));
     }
 
-    /*  public function categoryFilter($id)
-    {
-        $selectedCategory = Category::find($id);
-        $rootCategories = $selectedCategory->rootCategories();
-        $products = $selectedCategory->products()->paginate(15);
-
-        return view('catalog', compact('rootCategories', 'products'));
-    } */
-
     public function categoryFilter($id)
     {
-        $selectedCategory = Category::find($id);
-
-        // Get all subcategories of the selected category
-        $subcategories = $selectedCategory->SubCategory()->pluck('id')->toArray();
-        $subcategories[] = $selectedCategory->id;
-
-        $rootCategories = $selectedCategory->rootCategories();
+        $selectedCategory = Category::with('subCategory')->find($id);
+        $subcategories = $selectedCategory->subCategory->pluck('id')->push($selectedCategory->id);
+        $rootCategories = $selectedCategory->rootCategory ? [$selectedCategory->rootCategory] : $selectedCategory->rootCategories();
         $products = Product::whereIn('category_id', $subcategories)->paginate(15);
 
         return view('catalog', compact('rootCategories', 'products'));

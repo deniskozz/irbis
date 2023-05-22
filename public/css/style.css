@@ -636,14 +636,36 @@ footer ul {
     align-items: flex-end;
 }
 
-.sub-list-group {
-    padding-left: 10px;
-}
-
 .slick-arrow {
     display: none !important;
 }
 
 .card-link h4 {
     font-size: 18px;
+}
+
+.sub-list-group {
+    padding-left: 10px;
+}
+
+/* выпдающие категории */
+/* 
+
+.catalog-link:hover + .sub-list-group {
+    display: block;
+    margin-top: 0;
+    z-index: 2;
+}
+
+.sub-list-group:hover > .catalog-link {
+    display: block;
+    margin-top: 0;
+}
+ */
+#search-form-btn {
+    border: 1px solid var(--color-dark-blue);
+}
+
+#search-form-btn:hover {
+    background-color: var(--color-dark-blue);
 }

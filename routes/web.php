@@ -24,6 +24,7 @@ Route::get('/', [MainController::class, 'index'])->name('index');
 Route::get('/contact', [MainController::class, 'contact'])->name('contact');
 
 Route::get('/catalog', [CategoryController::class, 'index'])->name('catalog');
+Route::get('/catalog/search', [MainController::class, 'search'])->name('search');
 Route::get('/catalog/{category}', [CategoryController::class, 'categoryFilter']);
 Route::get('/catalog/{category}/{product}', [ProductController::class, 'productPage']);
 Route::get('/admin', [MainController::class, 'admin'])->name('admin');
@@ -51,6 +52,7 @@ Route::prefix('admin')->group(function () {
 Route::get('/cart', [CartController::class, 'cartShow']);
 Route::post('/cart/add', [CartController::class, 'add']);
 Route::post('/cart/update', [CartController::class, 'update'])->name('cart.update');
+
 
 
 Route::post('/callback', [CallbackController::class, 'callback'])->name('callback');
