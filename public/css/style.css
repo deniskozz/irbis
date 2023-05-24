@@ -628,7 +628,6 @@ footer ul {
 .to_cart-btn:hover {
     background: var(--color-gradient);
     color: #fff;
-    border: none;
     transition: border 0.3s;
 }
 .to_cart-form {
@@ -668,4 +667,8 @@ footer ul {
 
 #search-form-btn:hover {
     background-color: var(--color-dark-blue);
+}
+
+.product-quantity {
+    max-width: 30%;
 }

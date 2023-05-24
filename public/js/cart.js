@@ -1,38 +1,32 @@
-/* $(document).on("click", ".plus-btn, .minus-btn", function () {
-    const $input = $(this).siblings(".product-quantity");
-    let quantity = parseInt($input.val());
-
-    quantity = $(this).hasClass("plus-btn")
-        ? quantity + 1
-        : Math.max(1, quantity - 1);
-
-    updateQuantity($input, quantity);
-});
-
-function updateQuantity($input, quantity) {
-    $input.val(quantity);
+function increaseQuantity(button) {
+    var quantityInput = button.parentNode.querySelector(".product-quantity");
+    var currentQuantity = parseInt(quantityInput.value);
+    quantityInput.value = currentQuantity + 1;
+    updateTotal();
 }
 
-$(document).on("submit", ".update-form", function (event) {
-    event.preventDefault();
-    const form = event.target;
-    const url = form.action;
-    const data = new FormData(form);
+function decreaseQuantity(button) {
+    var quantityInput = button.parentNode.querySelector(".product-quantity");
+    var currentQuantity = parseInt(quantityInput.value);
+    if (currentQuantity > 1) {
+        quantityInput.value = currentQuantity - 1;
+        updateTotal();
+    }
+}
 
-    fetch(url, {
-        method: "POST",
-        body: data,
-    })
-        .then((response) => {
-            // Update the total amount in the cart
-            $(".cart-total").text(response.total);
+function updateTotal() {
+    var productSums = document.querySelectorAll(".product-sum");
+    var total = 0;
 
-            // Show a success message
-            alert("Cart updated successfully!");
-        })
-        .catch(() => {
-            // Show an error message
-            alert("Error updating cart");
-        });
-});
- */
+    productSums.forEach(function (productSum) {
+        var price = parseInt(productSum.previousElementSibling.textContent);
+        var quantity = parseInt(
+            productSum.parentNode.querySelector(".product-quantity").value
+        );
+        var sum = price * quantity;
+        productSum.textContent = sum + " руб.";
+        total += sum;
+    });
+
+    document.getElementById("total").textContent = total + " руб.";
+}

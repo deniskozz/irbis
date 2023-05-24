@@ -2,60 +2,122 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Cart;
 use Illuminate\Http\Request;
 use App\Models\Product;
 use App\Models\User;
 use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Auth;
+
 
 class CartController extends Controller
 {
 
     public function add(Request $request)
     {
-        $product_id = $request->input('product_id');
-        $quantity = $request->input('quantity', 1);
-        if (!is_int($quantity)) {
-            $quantity = 1;
+        if (Auth::check()) {
+            $this->addToUserCart($request);
+        } else {
+            $this->addToSessionCart($request);
         }
+
+        return redirect()->back();
+    }
+
+    private function addToUserCart(Request $request)
+    {
+        $user = Auth::user();
+        $cart = $user->cart ?? Cart::create(['user_id' => $user->id]);
+
+        $product = $cart->products()->where('products.id', $request->product_id)->first();
+
+        if ($product) {
+            if ($product->pivot->amount < $product->amount) {
+                $product->pivot->amount++;
+                $product->pivot->save();
+            }
+        } else {
+            $this->attachProductToCart($cart, $request->product_id);
+        }
+    }
+
+    private function addToSessionCart(Request $request)
+    {
+        $product_id = $request->input('product_id');
+        $quantity = (int)$request->input('quantity', 1);
 
         $product = Product::find($product_id);
-
-        if (!$product) {
-            abort(404, 'Product not found');
-        }
 
         $cart = $request->session()->get('cart', []);
 
         if (isset($cart[$product_id])) {
             $cart[$product_id]['quantity'] += $quantity;
+            $cart[$product_id]['amount'] += $product->price * $quantity; // Update the amount
         } else {
             $cart[$product_id] = [
-                'id' => $product_id, // Добавляем ключ 'id' со значением $product_id
+                'id' => $product_id,
                 'name' => $product->name,
                 'price' => $product->price,
                 'quantity' => $quantity,
+                'amount' => $product->price * $quantity, // Calculate the amount
             ];
         }
 
         $request->session()->put('cart', $cart);
-
-        return redirect()->back();
     }
+
+
+
+    private function attachProductToCart($cart, $product_id)
+    {
+        $price = Product::findOrFail($product_id)->price;
+        $cart->products()->attach($product_id, ['price' => $price]);
+    }
+
 
     public function cartShow()
     {
-
-        $cart = Session::get('cart', []);
+        $user = Auth::user();
+        $cartItems = [];
         $total = 0;
-        foreach ($cart as $key => $product) {
-            if (isset($product['id'])) {
-                $total += $product['price'] * $product['quantity'];
-            } else {
-                unset($cart[$key]); // Удаляем продукт из корзины, если у него нет id
+
+        if ($user) {
+            // Get the cart for authenticated user
+            $cart = $user->cart()->with('products')->first();
+
+            if ($cart) {
+                $cartItems = $cart->products;
+
+                foreach ($cartItems as $product) {
+                    $total += $product->pivot->price * $product->pivot->amount;
+                }
+            }
+        } else {
+            // Get the cart for guest user
+            $cart = Session::get('cart', []);
+
+            if (is_array($cart)) {
+                $cartItems = $cart;
+
+                foreach ($cartItems as $key => $product) {
+                    $cartItems[$key]['amount'] = $product['price'] * $product['quantity'];
+                    $total += $cartItems[$key]['amount'];
+                }
             }
         }
 
-        return view('cart', compact('cart', 'total'));
+        return view('cart', compact('cartItems', 'total', 'user'));
+    }
+
+
+
+
+
+
+
+    public function update(Request $request)
+    {
+        dd($request);
     }
 
     /*

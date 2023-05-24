@@ -48,4 +48,9 @@ class User extends Authenticatable
             ->using(CartProduct::class)
             ->withPivot('amount');
     }
+
+    public function cart()
+    {
+        return $this->hasOne(Cart::class)->latest();
+    }
 }

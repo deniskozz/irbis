@@ -7,6 +7,9 @@ use App\Http\Controllers\CartController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\CallbackController;
+use Illuminate\Support\Facades\Auth;
+
+
 
 
 /*
