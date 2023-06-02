@@ -28,12 +28,7 @@
 
                     </div>
                 </div>
-                <div class="mb-3">
-                    <div class="card-body">
-                        <!-- здесь будет форма с фильтрами -->
 
-                    </div>
-                </div>
 
             </div>
             <div class="col-md-9">

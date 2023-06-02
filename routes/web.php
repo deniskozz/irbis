@@ -3,10 +3,14 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\MainController;
+use App\Http\Controllers\OrderController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\CallbackController;
+use App\Http\Controllers\UserController;
+
+
 use Illuminate\Support\Facades\Auth;
 
 
@@ -52,13 +56,24 @@ Route::prefix('admin')->group(function () {
     Route::post('/edit/{id}', [ProductController::class, 'update'])->name('updateproduct');
 });
 
-Route::get('/cart', [CartController::class, 'cartShow']);
+Route::get('/cart', [CartController::class, 'cartShow'])->name('cart');
 Route::post('/cart/add', [CartController::class, 'add']);
 Route::post('/cart/update', [CartController::class, 'update'])->name('cart.update');
+Route::post('/cart/{product}', [CartController::class, 'deleteFromCart'])->name('cart.delete');
 
+
+Route::get('/personal', [UserController::class, 'showPersonalCabinet'])->middleware('auth')->name('personal');
+Route::post('/update-profile', [UserController::class, 'updateProfile'])->middleware('auth')->name('updateProfile');
+Route::post('/change-password', [UserController::class, 'changePassword'])->middleware('auth')->name('changePassword');
+
+
+Route::post('/order/place', [OrderController::class, 'placeOrder'])->name('order.place');
 
 
 Route::post('/callback', [CallbackController::class, 'callback'])->name('callback');
+
+
+Route::post('/update-cart', 'CartController@updateCart');
 
 
 Auth::routes();

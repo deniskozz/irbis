@@ -12,6 +12,27 @@ use Illuminate\Support\Facades\Auth;
 
 class CartController extends Controller
 {
+    public function cartShow()
+    {
+        $user = Auth::user();
+        $cartItems = [];
+        $total = 0;
+
+        if ($user) {
+            // Get the cart for authenticated user
+            $cart = $user->cart()->with('products')->first();
+
+            if ($cart) {
+                $cartItems = $cart->products;
+
+                foreach ($cartItems as $product) {
+                    $total += $product->pivot->price * $product->pivot->amount;
+                }
+            }
+        }
+
+        return view('cart', compact('cartItems', 'total', 'user'));
+    }
 
     public function add(Request $request)
     {
@@ -28,17 +49,37 @@ class CartController extends Controller
     {
         $user = Auth::user();
         $cart = $user->cart ?? Cart::create(['user_id' => $user->id]);
+        $quantity = (int) $request->quantity;
+        $productId = $request->product_id;
 
-        $product = $cart->products()->where('products.id', $request->product_id)->first();
+        if ($this->canAddToCart($cart, $productId, $quantity)) {
+            $product = $cart->products()->where('products.id', $productId)->first();
 
-        if ($product) {
-            if ($product->pivot->amount < $product->amount) {
-                $product->pivot->amount++;
-                $product->pivot->save();
+            if ($product) {
+                $cart->products()->updateExistingPivot($productId, [
+                    'amount' => $product->pivot->amount + $quantity
+                ]);
+            } else {
+                $product = Product::findOrFail($productId);
+                $price = $product->price;
+
+                $cart->products()->attach($productId, [
+                    'price' => $price,
+                    'amount' => $quantity
+                ]);
             }
-        } else {
-            $this->attachProductToCart($cart, $request->product_id);
         }
+    }
+
+    private function canAddToCart($cart, $productId, $quantity)
+    {
+        $product = $cart->products()->where('products.id', $productId)->first();
+
+        if ($product && $product->pivot->amount >= $product->amount) {
+            return false;
+        }
+
+        return true;
     }
 
     private function addToSessionCart(Request $request)
@@ -66,90 +107,14 @@ class CartController extends Controller
         $request->session()->put('cart', $cart);
     }
 
-
-
-    private function attachProductToCart($cart, $product_id)
+    public function deleteFromCart(Product $product)
     {
-        $price = Product::findOrFail($product_id)->price;
-        $cart->products()->attach($product_id, ['price' => $price]);
+        // Находим текущую корзину пользователя
+        $cart = auth()->user()->cart;
+
+        // Удаляем товар из связи "многие ко многим" с помощью метода detach
+        $cart->products()->detach($product->id);
+
+        return redirect()->back()->with('success', 'Товар успешно удален из корзины.');
     }
-
-
-    public function cartShow()
-    {
-        $user = Auth::user();
-        $cartItems = [];
-        $total = 0;
-
-        if ($user) {
-            // Get the cart for authenticated user
-            $cart = $user->cart()->with('products')->first();
-
-            if ($cart) {
-                $cartItems = $cart->products;
-
-                foreach ($cartItems as $product) {
-                    $total += $product->pivot->price * $product->pivot->amount;
-                }
-            }
-        } else {
-            // Get the cart for guest user
-            $cart = Session::get('cart', []);
-
-            if (is_array($cart)) {
-                $cartItems = $cart;
-
-                foreach ($cartItems as $key => $product) {
-                    $cartItems[$key]['amount'] = $product['price'] * $product['quantity'];
-                    $total += $cartItems[$key]['amount'];
-                }
-            }
-        }
-
-        return view('cart', compact('cartItems', 'total', 'user'));
-    }
-
-
-
-
-
-
-
-    public function update(Request $request)
-    {
-        dd($request);
-    }
-
-    /*
-    public function update(Request $request)
-    {
-        // Get the product ID and new quantity from the request
-        $product_id = $request->input('product_id');
-        $newQuantity = $request->input('newQuantity');
-        dd($product_id);
-        // Get the cart from the session
-        $cart = $request->session()->get('cart', []);
-
-        // Find the product in the cart and update quantity
-        if (isset($cart[$product_id])) {
-            $cart[$product_id]['quantity'] = $newQuantity;
-            $cart[$product_id]['sum'] = $cart[$product_id]['price'] * $newQuantity;
-        }
-
-        // Update session with the new cart
-        $request->session()->put('cart', $cart);
-
-        // Update the quantity in the database
-        $user = auth()->user();
-        $user->products()->updateExistingPivot($product_id, ['amount' => $newQuantity]);
-
-        // Calculate total amount
-        $total = collect($cart)->sum('sum');
-
-        // Return product and total amount in JSON format
-        return response()->json([
-            'product' => $cart[$product_id],
-            'total' => $total
-        ]);
-    } */
 }

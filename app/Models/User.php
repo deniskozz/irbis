@@ -22,6 +22,7 @@ class User extends Authenticatable
         'login',
         'name',
         'phone',
+        'email',
         'password',
     ];
 
@@ -47,6 +48,11 @@ class User extends Authenticatable
         return $this->belongsToMany(Product::class)
             ->using(CartProduct::class)
             ->withPivot('amount');
+    }
+
+    public function orders()
+    {
+        return $this->hasMany(Order::class);
     }
 
     public function cart()

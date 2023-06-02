@@ -112,7 +112,7 @@ footer {
     outline: none;
 }
 
-.callback-form__btn {
+.btn-gradient {
     border: 1px solid transparent;
     border-image: var(--color-gradient);
     border-image-slice: 1;
@@ -121,7 +121,7 @@ footer {
     background-color: #fff;
 }
 
-.callback-form__btn:hover {
+.btn-gradient:hover {
     background: var(--color-gradient);
     color: #fff;
     border: none 1px solid white;
@@ -336,6 +336,15 @@ figure.effect-sadie:hover p {
 
 .contacts-col {
     align-items: flex-end;
+}
+
+.footer-link-links {
+    border-bottom: 1px solid var(--color-dark-blue);
+    margin-bottom: 0.7em;
+}
+
+.footer-link-links:hover {
+    border-bottom: 1px solid #fff;
 }
 
 .footer-link-contact {
@@ -671,4 +680,29 @@ footer ul {
 
 .product-quantity {
     max-width: 30%;
+}
+
+.block-center {
+    margin: 0 auto;
+    text-align: center;
+    transform: translateY(105%);
+    padding: 1em;
+}
+
+.block-center a {
+    margin: 10px;
+}
+
+.block-center p {
+    font-size: 1.2em;
+}
+
+.collapse-link {
+    text-decoration: none;
+    color: #000;
+    font-size: 0.5em;
+}
+
+.total-price {
+    font-weight: bolder;
 }

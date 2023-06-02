@@ -324,9 +324,9 @@
                     style="border-bottom: 1px solid #fff; padding: 5px 20px 5px 20px; font-weight: 600; font-size: 1.1em;">Навигация</span>
             </p>
             <ul>
-                <li><a class="footer-link-links" href="#">О компании</a></li>
-                <li><a class="footer-link-links" href="#">Каталог</a></li>
-                <li><a class="footer-link-links" href="#">Контакты</a></li>
+                <li><a class="footer-link-links" href="/">Главная</a></li>
+                <li><a class="footer-link-links" href="{{ route('catalog') }}">Каталог</a></li>
+                <li><a class="footer-link-links" href="{{ route('contact') }}">Контакты</a></li>
             </ul>
         </div>
         <div class="col-md-4 col-12 contacts-col">

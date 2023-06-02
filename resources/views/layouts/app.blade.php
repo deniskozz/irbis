@@ -67,6 +67,9 @@
                     <!-- Right Side Of Navbar -->
                     <ul class="navbar-nav col justify-content-end">
                         <!-- Authentication Links -->
+                        @auth
+                            <li class="nav-item mx-1"><a class="nav-link" href="{{ route('personal') }}">Профиль</a></li>
+                        @endauth
                         <li class="nav-item mx-1">
                             <a class="nav-link" href="/cart">Корзина</a>
                         </li>
