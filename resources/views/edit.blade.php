@@ -6,7 +6,7 @@
         <form action="{{ route('updateproduct', $product->id) }}" enctype="multipart/form-data" method="POST">
             @csrf
             <label for="name">Название:</label><br>
-            <input name="name" type="text" value="{{ $product->name }}"><br><br>
+            <input class="w-50" name="name" type="text" value="{{ $product->name }}"><br><br>
             <label for="category">Категория:</label><br>
             <select name="category_id">
                 @foreach ($categories as $category)
@@ -15,9 +15,9 @@
                 @endforeach
             </select><br><br>
             <label for="description">Описание:</label><br>
-            <textarea name="description">{{ $product->description }}</textarea><br><br>
+            <textarea class="w-100" name="description">{{ $product->description }}</textarea><br><br>
             <label for="parameters">Описание:</label><br>
-            <textarea cols="15" name="parameters">{{ $product->parameters }}</textarea><br><br>
+            <textarea class="w-100" name="parameters">{{ $product->parameters }}</textarea><br><br>
             <label for="price">Цена:</label><br>
             <input name="price" type="number" value="{{ $product->price }}"><br><br>
             <label for="img">Изображение:</label><br>

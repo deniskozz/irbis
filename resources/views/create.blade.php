@@ -11,12 +11,19 @@
             </div>
             <div class="form-group">
                 <label for="name">Категория</label>
-                {{-- поменять на селект --}}
-                <input class="form-control" id="name" name="category_id" required type="number" value="">
+                <select class="form-control" id="name" name="category_id">
+                    @foreach ($categories as $category)
+                        <option value="{{ $category->id }}">{{ $category->name }}</option>
+                    @endforeach
+                </select>
             </div>
             <div class="form-group">
                 <label for="description">Описание</label>
                 <textarea class="form-control" id="description" name="description" required rows="3">{{ old('description') }}</textarea>
+            </div>
+            <div class="form-group">
+                <label for="parameters">Параметры</label>
+                <textarea class="form-control" id="parameters" name="parameters" required rows="3">{{ old('parameters') }}</textarea>
             </div>
             <div class="form-group">
                 <label for="description">картинка</label>
@@ -28,7 +35,7 @@
                     value="{{ old('price') }}">
             </div>
             <button class="btn btn-primary" type="submit">Создать</button>
-            <a class="btn btn-secondary" href="{{ route('create') }}">Отмена</a>
+            <a class="btn btn-secondary" href="{{ route('admin') }}">Отмена</a>
         </form>
     </div>
 @endsection

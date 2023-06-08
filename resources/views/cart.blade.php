@@ -8,7 +8,7 @@
             @if (count($cartItems) == 0)
                 <p>В корзине нет товаров</p>
             @else
-                <form action="{{ route('order.place') }}" class="update-form" method="POST">
+                <form action="{{ route('order.place') }}" class="table-responsive update-form" method="POST">
                     <table class="table">
                         <thead>
                             <tr>
@@ -46,8 +46,6 @@
 
                                 </tr>
                             @endforeach
-
-
                             <tr>
                                 <td colspan="3"><b>Итого:</b></td>
                                 <td><b id="total">{{ $total }} руб.</b></td>

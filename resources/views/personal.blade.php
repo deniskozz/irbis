@@ -43,7 +43,7 @@
                                 </div>
                                 <div aria-labelledby="orderHeading{{ $order->id }}" class="collapse"
                                     data-parent="#ordersCollapse" id="orderCollapse{{ $order->id }}">
-                                    <div class="card-body">
+                                    <div class="card-body table-responsive">
                                         <table class="table">
                                             <thead>
                                                 <tr>

@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\Order as MailOrder;
+use Illuminate\Support\Facades\Mail;
 use App\Models\Cart;
 use App\Models\Order;
 use Illuminate\Http\Request;
@@ -14,19 +16,33 @@ class OrderController extends Controller
     {
         $user = $request->user();
         $cart = $user->cart()->with('products')->first();
+        $order = $user->orders()->create([
+            'cart_id' => $cart->id,
+            'status' => 0,
+        ]);
+        $user->cart()->create();
+        Mail::to($user->email)->send(new MailOrder($user));
+        return redirect('/');
+    }
 
-        $order = new Order();
-        $order->cart_id = $cart->id;
-        $order->user_id = $user->id;
-        $order->status = 0;
-        $order->name = $user->name;
-        $order->phone = $user->phone;
+    public function index()
+    {
+        $orders = Order::orderBy('created_at', 'desc')->get();
+
+        return view('orders', compact('orders'));
+    }
+
+    public function updateStatus(Order $order, Request $request)
+    {
+        $order->status = $request->status;
         $order->save();
 
-        $newCart = new Cart();
-        $newCart->user_id = $user->id;
-        $newCart->save();
+        return redirect()->back()->with('success', 'Статус заказа успешно обновлен.');
+    }
 
-        return redirect('/');
+
+    public function show(Order $order)
+    {
+        return view('order_details', compact('order'));
     }
 }

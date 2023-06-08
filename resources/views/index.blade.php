@@ -69,7 +69,7 @@
                         обладают большим опытом и быстро монтируют систему. Мы гарантируем безопасность вашего имущества и
                         защиту от краж и вандализма</p>
                 </div>
-                <div class="col-sm-6 col-md-6 img-side">
+                <div class="col-sm-6 d-none d-md-flex col-md-6 img-side">
                     <img alt="" class="img-fluid" src="/public/img/man.png">
                 </div>
             </div>

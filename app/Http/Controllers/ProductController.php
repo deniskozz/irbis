@@ -17,7 +17,8 @@ class ProductController extends Controller
 
     public function create()
     {
-        return view('create');
+        $categories = Category::get();
+        return view('create', compact('categories'));
     }
 
     public function store(Request $request)
@@ -26,6 +27,7 @@ class ProductController extends Controller
             'name' => 'required',
             'category_id' => 'required',
             'description' => 'required',
+            'parameters' => 'required',
             'price' => 'required',
             'img' => 'nullable|image|mimes:jpeg,png,jpg,gif'
         ]);

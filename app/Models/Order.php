@@ -18,4 +18,8 @@ class Order extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+    protected $fillable = [
+        'cart_id'
+    ];
 }

@@ -37,24 +37,26 @@ Route::get('/catalog/{category}/{product}', [ProductController::class, 'productP
 Route::get('/admin', [MainController::class, 'admin'])->name('admin');
 
 Route::prefix('admin')->group(function () {
-    Route::get('/productlist', [ProductController::class, 'index'])
-        ->name('productlist');
 
-    Route::get('/create', [ProductController::class, 'create'])
-        ->name('create');
+    Route::get('/productlist', [ProductController::class, 'index'])->name('productlist');
 
-    Route::post('/destroy/{id}', [ProductController::class, 'destroy'])
-        ->name('destroy');
+    Route::get('/create', [ProductController::class, 'create'])->name('create');
 
-    Route::post('/store', [ProductController::class, 'store'])
-        ->name('store');
+    Route::post('/destroy/{id}', [ProductController::class, 'destroy'])->name('destroy');
 
-    // Маршрут для отображения страницы редактирования продукта
+    Route::post('/store', [ProductController::class, 'store'])->name('store');
+
+    Route::get('/orders', [OrderController::class, 'index'])->name('orders');
+
     Route::get('/product/{id}/edit', [ProductController::class, 'edit'])->name('editproduct');
 
-    // Маршрут для обработки запроса на редактирование продукта
     Route::post('/edit/{id}', [ProductController::class, 'update'])->name('updateproduct');
+
+    Route::put('/orders/{order}/update-status', [OrderController::class, 'updateStatus'])->name('update_status');
+
+    Route::get('/orders/{order}/details', [OrderController::class, 'show'])->name('order_details');
 });
+
 
 Route::get('/cart', [CartController::class, 'cartShow'])->name('cart');
 Route::post('/cart/add', [CartController::class, 'add']);

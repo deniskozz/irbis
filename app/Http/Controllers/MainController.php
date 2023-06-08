@@ -36,7 +36,6 @@ class MainController extends Controller
 
     public function categoryFilter($id)
     {
-        /* $selectedCategory = Category::find($id); */
         $selectedCategory = Category::find($id);
         $categories = Category::all();
         $products = $selectedCategory->products()->paginate(15);
